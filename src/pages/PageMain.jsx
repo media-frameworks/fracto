@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import {CoolStyles} from "common/ui/CoolImports";
 
-import FractoIncrementalRender from "fracto/common/render/FractoIncrementalRender";
-import {get_ideal_level} from "fracto/common/data/FractoData";
-import FractoIndexedTiles from "fracto/common/data/FractoIndexedTiles"
-// import Utils from "common/system/Utils"
+import FractoIncrementalRender from "fracto/render/FractoIncrementalRender";
+import {get_ideal_level} from "fracto/data/FractoData";
 
 import FractoCanvasDetails from "./FractoCanvasDetails"
 
@@ -21,6 +20,9 @@ const FrameWrapper = styled(CoolStyles.Block)`
 `;
 
 export class PageMain extends Component {
+   static propTypes = {
+      app_name: PropTypes.string.isRequired,
+   }
 
    state = {
       width_px: 0,
@@ -28,7 +30,7 @@ export class PageMain extends Component {
       frame_wrapper_ref: React.createRef(),
       indexed_loading: false,
       image_ready: false,
-      scope: 0.5,
+      scope: 0.1275,
       focal_point: {x: -1.2721078058803346, y: 0.05234162923252158},
       video_id: 0, // Utils.random_id(),
       frame_index: 0,
@@ -36,21 +38,8 @@ export class PageMain extends Component {
    }
 
    componentDidMount() {
-      FractoIndexedTiles.get_level_tiles(2, result => {
-         this.resize_wrapper();
-         window.addEventListener("resize", this.resize_wrapper);
-         this.load_all_levels(3)
-      })
-   }
-
-   load_all_levels = (start_at) => {
-      if (start_at > 35) {
-         return;
-      }
-      FractoIndexedTiles.get_level_tiles(start_at, result => {
-         // console.log(`loaded level ${start_at}`)
-         this.load_all_levels(start_at + 1)
-      })
+      this.resize_wrapper();
+      window.addEventListener("resize", this.resize_wrapper);
    }
 
    resize_wrapper = (e = null) => {
@@ -82,16 +71,6 @@ export class PageMain extends Component {
          image_ready: true,
          canvas_buffer: canvas_buffer
       })
-      // const {scope, frame_index} = this.state
-      // const new_scope = scope * 0.995
-      // console.log("on_plan_complete")
-      // setTimeout(() => {
-      //    this.setState({
-      //       image_ready: true,
-      //       scope: new_scope,
-      //       frame_index: frame_index + 1
-      //    })
-      // }, 100)
    }
 
    render() {
@@ -123,6 +102,7 @@ export class PageMain extends Component {
             on_plan_complete={this.on_plan_complete}
             video_id={video_id}
             frame_index={frame_index}
+            disabled={indexed_loading}
          />
          data_view = <FractoCanvasDetails
             width_px={canvas_width}

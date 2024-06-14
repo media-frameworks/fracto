@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import {CoolStyles} from "common/ui/CoolImports";
-import PropTypes from "prop-types";
-import {render_coordinates} from 'fracto/common/FractoStyles';
+import {render_coordinates} from 'fracto/FractoStyles';
 
 const SectionBlock = styled(CoolStyles.Block)`
    margin-left: 1rem;
